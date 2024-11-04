@@ -91,5 +91,13 @@ public class Main {
 		} else {
 			System.out.println("Файл не знайдено.");
 		}
+		System.out.println(student1.toString());
+		System.out.println(student2.toString());
+		
+		System.out.println(student1 == student2);
+		System.out.println(student1.equals(student2));
+
+		System.out.println(student1.hashCode());
+		System.out.println(student2.hashCode());
 	}
 }
