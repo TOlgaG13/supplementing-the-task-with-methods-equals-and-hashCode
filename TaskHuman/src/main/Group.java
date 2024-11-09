@@ -1,81 +1,70 @@
 package main;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Arrays;
 
+
+import java.util.Collections;
 public class Group {
+	private static final int MAX_GROUP_SIZE = 10;
 	private String groupName;
-	private Student[] students = new Student[10];
-
-	public Group(String groupName, Student[] students) {
+	private ArrayList<Student> students = new ArrayList<>();
+	public Group(String groupName, ArrayList<Student> students) {
 		super();
 		this.groupName = groupName;
 		this.students = students;
 	}
-
 	public Group() {
 		super();
 	}
-
 	public String getGroupName() {
 		return groupName;
 	}
-
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-
-	public Student[] getStudens() {
+	public ArrayList<Student> getStudents() {
 		return students;
 	}
-
-	public void setStudens(Student[] students) {
+	public void setStudents(ArrayList<Student> students) {
 		this.students = students;
 	}
-
+	public static int getMaxGroupSize() {
+		return MAX_GROUP_SIZE;
+	}
+	//додаємо студента 
 	public void addStudent(Student student) throws GroupOverflowException {
 		 if (equivalentStudent(student)) {
 		        System.out.println("Student already exists in the group");
 		        return;
 		    }
-		
-		for (int i = 0; i < students.length; i++) {
-			if (students[i] == null) {
-				students[i] = student;
-				System.out.println("add to group");
-				return;
-			}
-		}
-		throw new GroupOverflowException("the group is overcrowded");
-	}
-
+		  if (students.size() >= MAX_GROUP_SIZE) {
+	            throw new GroupOverflowException("The group is overcrowded");
+	        }
+		  students.add(student);
+	        System.out.println("Added to group");
+	    }
+	//пошук студента
 	public Student searchStudentByLastName(String lastName) throws StudentNotFoundException {
-		for (int i = 0; i < students.length; i++) {
-			if (students[i] != null) {
-				if (students[i].getLastName().equals(lastName)) {
-					return students[i];
-				}
-			}
-		}
-		throw new StudentNotFoundException("Don't found student.");
-	}
-
+		   for (Student student : students) {
+		        if (student != null && student.getLastName().equals(lastName)) {
+		            return student;
+		        }
+		    }
+		    throw new StudentNotFoundException("Student not found.");
+		}//видалення
 	public boolean removeStudentById(int id) {
-		for (int i = 0; i < students.length; i++) {
-			if (students[i] != null) {
-				if (students[i].getId() == id) {
-					students[i] = null;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
+	    for (Student student : students) {
+	        if (student != null && student.getId() == id) {
+	            students.remove(student);
+	            return true;
+	        }
+	    }
+	    return false;
+	} //сортування
 	public void sortStudentsByLastName() {
-		Arrays.sort(students, new StudantLastNameComparator());
-	}
+		 Collections.sort(students, new StudantLastNameComparator());
+    }
 
 	@Override
 	public String toString() {
@@ -88,15 +77,10 @@ public class Group {
 		}
 		return list.toString();
 	}
-
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(students);
-		result = prime * result + Objects.hash(groupName);
-		return result;
-	}
+    public int hashCode() {
+        return Objects.hash(groupName, students);
+    }
 
 	@Override
 	public boolean equals(Object obj) {
@@ -107,7 +91,7 @@ public class Group {
 		if (getClass() != obj.getClass())
 			return false;
 		Group other = (Group) obj;
-		return Objects.equals(groupName, other.groupName) && Arrays.equals(students, other.students);
+		return Objects.equals(groupName, other.groupName) && Objects.equals(students, other.students);
 	}
 	public boolean equivalentStudent(Student student) {
 		for(Student s: students) {
