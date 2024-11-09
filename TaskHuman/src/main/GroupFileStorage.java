@@ -9,7 +9,7 @@ import java.io.BufferedWriter;
 public class GroupFileStorage {
 	 public void saveGroupToCSV(Group group, String filePath) {
         try (FileWriter writer = new FileWriter(filePath)) {
-            for (Student student : group.getStudens()) {
+            for (Student student : group.getStudents()) {
                 writer.write(studentToCSV(student));
                 writer.write("\n");
             }
@@ -31,7 +31,7 @@ public class GroupFileStorage {
 		        CSVStringConverter cnvrt = new CSVStringConverter();
 
 		        while ((temp = br.readLine()) != null) {
-		            if (result.getStudens().length >= 10) {
+		            if (result.getStudents().size() >= 10) {
 		                System.out.println("Група переповнена");
 		                break;
 		            }
